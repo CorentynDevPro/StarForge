@@ -56,7 +56,7 @@ services:
     volumes:
       - ./packages/backend:/app/packages/backend
       - /app/node_modules
-    command: npm run dev
+    command: pnpm run dev
 
   bot:
     build:
@@ -78,7 +78,7 @@ services:
     volumes:
       - ./packages/bot:/app/packages/bot
       - /app/node_modules
-    command: npm run dev
+    command: pnpm run dev
 
   frontend:
     build:
@@ -95,7 +95,7 @@ services:
     volumes:
       - ./packages/frontend:/app/packages/frontend
       - /app/node_modules
-    command: npm run dev
+    command: pnpm run dev
 
   admin-ui:
     build:
@@ -112,7 +112,7 @@ services:
     volumes:
       - ./packages/admin-ui:/app/packages/admin-ui
       - /app/node_modules
-    command: npm run dev
+    command: pnpm run dev
 
 volumes:
   postgres_data:

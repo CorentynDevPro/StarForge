@@ -2,16 +2,19 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+# Install pnpm
+RUN npm install -g pnpm@8
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY turbo.json ./
 
 COPY packages/frontend ./packages/frontend
 COPY packages/shared ./packages/shared
 
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 WORKDIR /app/packages/frontend
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+CMD ["pnpm", "run", "dev", "--", "--host", "0.0.0.0"]

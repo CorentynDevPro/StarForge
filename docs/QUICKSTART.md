@@ -5,20 +5,22 @@ This guide will help you get StarForge up and running quickly.
 ## Prerequisites
 
 - Node.js 18+ (recommended: 20.x)
-- npm 9+
+- pnpm 8+
 - Git
 
 ## Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/CorentynDevPro/StarForge.git
    cd StarForge
    ```
 
 2. **Install dependencies:**
+
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Set up environment variables:**
@@ -30,8 +32,9 @@ This guide will help you get StarForge up and running quickly.
 ## Building
 
 Build all packages:
+
 ```bash
-npm run build
+pnpm run build
 ```
 
 This will compile TypeScript for all packages in the monorepo.
@@ -42,14 +45,15 @@ This will compile TypeScript for all packages in the monorepo.
 
 ```bash
 # Development mode with hot reload
-npm run dev --workspace=@starforge/backend
+pnpm run dev --filter @starforge/backend
 
 # Production mode
-npm run build --workspace=@starforge/backend
-npm run start --workspace=@starforge/backend
+pnpm run build --filter @starforge/backend
+pnpm run start --filter @starforge/backend
 ```
 
 Test the backend:
+
 ```bash
 curl http://localhost:3000/api/health
 ```
@@ -58,13 +62,13 @@ curl http://localhost:3000/api/health
 
 ```bash
 # Make sure to set DISCORD_TOKEN in .env first
-npm run dev --workspace=@starforge/bot
+pnpm run dev --filter @starforge/bot
 ```
 
 ### Frontend (Port 5173)
 
 ```bash
-npm run dev --workspace=@starforge/frontend
+pnpm run dev --filter @starforge/frontend
 ```
 
 Open http://localhost:5173 in your browser.
@@ -72,7 +76,7 @@ Open http://localhost:5173 in your browser.
 ### Admin UI (Port 5174)
 
 ```bash
-npm run dev --workspace=@starforge/admin-ui
+pnpm run dev --filter @starforge/admin-ui
 ```
 
 Open http://localhost:5174 in your browser.
@@ -80,8 +84,9 @@ Open http://localhost:5174 in your browser.
 ## Running All Services
 
 Use the root dev command to start multiple services:
+
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 This uses Turbo to run all dev servers in parallel.
@@ -102,6 +107,7 @@ docker-compose down
 ```
 
 Services will be available at:
+
 - Backend: http://localhost:3000
 - Frontend: http://localhost:5173
 - Admin UI: http://localhost:5174
@@ -117,7 +123,7 @@ Services will be available at:
 docker-compose up -d postgres redis
 
 # Run migrations
-npm run migrate # (TODO: Add migration script)
+pnpm run migrate # (TODO: Add migration script)
 ```
 
 ### Manual Setup
@@ -138,29 +144,31 @@ psql -d starforge -f database/seeds.sql
 ## Testing
 
 Run all tests:
+
 ```bash
-npm test
+pnpm test
 ```
 
 Run tests for a specific package:
+
 ```bash
-npm test --workspace=@starforge/backend
+pnpm test --filter @starforge/backend
 ```
 
 ## Linting & Formatting
 
 ```bash
 # Lint all code
-npm run lint
+pnpm run lint
 
 # Format all code
-npm run format
+pnpm run format
 
 # Check formatting without making changes
-npm run format:check
+pnpm run format:check
 
 # Type checking
-npm run type-check
+pnpm run type-check
 ```
 
 ## Project Structure
@@ -186,6 +194,7 @@ StarForge/
 ### Port already in use
 
 If you get "Port already in use" errors:
+
 ```bash
 # Find and kill the process
 lsof -ti:3000 | xargs kill -9  # Backend
@@ -196,6 +205,7 @@ lsof -ti:5174 | xargs kill -9  # Admin
 ### Discord bot not starting
 
 Make sure you have:
+
 1. Created a Discord application at https://discord.com/developers/applications
 2. Created a bot and copied the token to DISCORD_TOKEN in .env
 3. Invited the bot to your test server
@@ -203,6 +213,7 @@ Make sure you have:
 ### Database connection errors
 
 1. Make sure PostgreSQL is running:
+
    ```bash
    docker-compose up -d postgres
    ```
@@ -224,19 +235,20 @@ Make sure you have:
 
 ## Development Tips
 
-1. **Use Turbo's cache:** Turbo caches build outputs. Clear with `npm run clean`
+1. **Use Turbo's cache:** Turbo caches build outputs. Clear with `pnpm run clean`
 
-2. **Watch mode:** All packages support `npm run dev` for hot reloading
+2. **Watch mode:** All packages support `pnpm run dev` for hot reloading
 
-3. **Workspace commands:** Use `--workspace=` to run commands in specific packages
+3. **Workspace commands:** Use `--filter` to run commands in specific packages
 
-4. **TypeScript errors:** Run `npm run type-check` to check all packages
+4. **TypeScript errors:** Run `pnpm run type-check` to check all packages
 
 5. **Format on save:** Configure your editor to run Prettier on save
 
 ## Support
 
 For questions or issues:
+
 - Open an issue on GitHub
 - Check existing documentation in `/docs`
 - Review code comments in source files

@@ -2,8 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Install pnpm
+RUN npm install -g pnpm@8
+
 # Copy package files
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY turbo.json ./
 COPY tsconfig.json ./
 
@@ -12,18 +15,18 @@ COPY packages/backend ./packages/backend
 COPY packages/shared ./packages/shared
 
 # Install dependencies
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Build shared package
 WORKDIR /app/packages/shared
-RUN npm run build
+RUN pnpm run build
 
 # Build backend
 WORKDIR /app/packages/backend
-RUN npm run build
+RUN pnpm run build
 
 WORKDIR /app
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start", "--workspace=@starforge/backend"]
+CMD ["pnpm", "run", "start", "--filter", "@starforge/backend"]

@@ -14,7 +14,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@starforge/shared": "*",
+    "@starforge/shared": "workspace:*",
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0"
   },

@@ -19,7 +19,7 @@ Next-generation community platform for Gems of War Guild Masters and players. Tr
 
 ## 📦 Monorepo Structure
 
-This is a TypeScript monorepo using npm workspaces and Turbo:
+This is a TypeScript monorepo using pnpm workspaces and Turbo:
 
 ```
 StarForge/
@@ -69,7 +69,7 @@ StarForge/
 ### Prerequisites
 
 - Node.js 18+
-- npm 9+
+- pnpm 8+
 - Docker and Docker Compose
 - PostgreSQL 15+ (or use Docker)
 
@@ -85,7 +85,7 @@ cd StarForge
 2. Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 3. Copy environment variables:
@@ -113,16 +113,16 @@ psql -h localhost -U starforge -d starforge -f database/seeds.sql
 Start all services in development mode:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Or start individual packages:
 
 ```bash
-npm run dev --workspace=@starforge/backend
-npm run dev --workspace=@starforge/frontend
-npm run dev --workspace=@starforge/bot
-npm run dev --workspace=@starforge/admin-ui
+pnpm run dev --filter @starforge/backend
+pnpm run dev --filter @starforge/frontend
+pnpm run dev --filter @starforge/bot
+pnpm run dev --filter @starforge/admin-ui
 ```
 
 Services will be available at:
@@ -150,13 +150,13 @@ docker-compose down
 Run all tests:
 
 ```bash
-npm test
+pnpm test
 ```
 
 Run tests for a specific package:
 
 ```bash
-npm test --workspace=@starforge/backend
+pnpm test --filter @starforge/backend
 ```
 
 ## 🎨 Linting & Formatting
@@ -164,19 +164,19 @@ npm test --workspace=@starforge/backend
 Lint all packages:
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 Format code:
 
 ```bash
-npm run format
+pnpm run format
 ```
 
 Check formatting:
 
 ```bash
-npm run format:check
+pnpm run format:check
 ```
 
 ## 🏗️ Building
@@ -184,13 +184,13 @@ npm run format:check
 Build all packages:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 Build a specific package:
 
 ```bash
-npm run build --workspace=@starforge/backend
+pnpm run build --filter @starforge/backend
 ```
 
 ## 📚 Documentation
@@ -229,7 +229,7 @@ docker build -f docker/Dockerfile.frontend -t starforge-frontend .
 1. Build all packages:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 2. Set production environment variables
@@ -237,8 +237,8 @@ npm run build
 3. Start services:
 
 ```bash
-npm start --workspace=@starforge/backend
-npm start --workspace=@starforge/bot
+pnpm start --filter @starforge/backend
+pnpm start --filter @starforge/bot
 ```
 
 ## 🤝 Contributing
