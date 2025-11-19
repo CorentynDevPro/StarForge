@@ -1,0 +1,29 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY turbo.json ./
+COPY tsconfig.json ./
+
+# Copy workspace packages
+COPY packages/backend ./packages/backend
+COPY packages/shared ./packages/shared
+
+# Install dependencies
+RUN npm ci
+
+# Build shared package
+WORKDIR /app/packages/shared
+RUN npm run build
+
+# Build backend
+WORKDIR /app/packages/backend
+RUN npm run build
+
+WORKDIR /app
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start", "--workspace=@starforge/backend"]

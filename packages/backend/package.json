@@ -1,0 +1,32 @@
+{
+  "name": "@starforge/backend",
+  "version": "1.0.0",
+  "description": "Fastify backend API for Gems of War platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.4.2",
+    "@fastify/env": "^4.3.0",
+    "@fastify/jwt": "^7.2.3",
+    "@starforge/shared": "workspace:*",
+    "@supabase/supabase-js": "^2.39.0",
+    "fastify": "^4.25.1",
+    "pino": "^8.17.1",
+    "pino-pretty": "^10.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.4"
+  }
+}

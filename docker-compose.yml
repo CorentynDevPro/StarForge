@@ -1,0 +1,119 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: starforge-postgres
+    environment:
+      POSTGRES_DB: starforge
+      POSTGRES_USER: starforge
+      POSTGRES_PASSWORD: starforge_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/seeds.sql:/docker-entrypoint-initdb.d/02-seeds.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U starforge"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: starforge-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: starforge-backend
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      SUPABASE_URL: http://postgres:5432
+      SUPABASE_ANON_KEY: your-anon-key-here
+      JWT_SECRET: your-jwt-secret-here
+      DATABASE_URL: postgresql://starforge:starforge_dev@postgres:5432/starforge
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./packages/backend:/app/packages/backend
+      - /app/node_modules
+    command: npm run dev
+
+  bot:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.bot
+    container_name: starforge-bot
+    environment:
+      NODE_ENV: development
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      DATABASE_URL: postgresql://starforge:starforge_dev@postgres:5432/starforge
+      SUPABASE_URL: http://postgres:5432
+      SUPABASE_ANON_KEY: your-anon-key-here
+    depends_on:
+      postgres:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    volumes:
+      - ./packages/bot:/app/packages/bot
+      - /app/node_modules
+    command: npm run dev
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: starforge-frontend
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: http://localhost:3000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./packages/frontend:/app/packages/frontend
+      - /app/node_modules
+    command: npm run dev
+
+  admin-ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.admin
+    container_name: starforge-admin
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: http://localhost:3000
+    ports:
+      - "5174:5174"
+    depends_on:
+      - backend
+    volumes:
+      - ./packages/admin-ui:/app/packages/admin-ui
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,0 +1,17 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY turbo.json ./
+
+COPY packages/admin-ui ./packages/admin-ui
+COPY packages/shared ./packages/shared
+
+RUN npm ci
+
+WORKDIR /app/packages/admin-ui
+
+EXPOSE 5174
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
