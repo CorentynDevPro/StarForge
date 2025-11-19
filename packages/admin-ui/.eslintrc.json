@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "../../.eslintrc.json",
+    "plugin:vue/vue3-recommended",
+    "@vue/eslint-config-typescript"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  }
+}

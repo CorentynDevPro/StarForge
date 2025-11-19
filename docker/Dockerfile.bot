@@ -1,0 +1,25 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm@8
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY turbo.json ./
+COPY tsconfig.json ./
+
+COPY packages/bot ./packages/bot
+COPY packages/shared ./packages/shared
+
+RUN pnpm install --frozen-lockfile
+
+WORKDIR /app/packages/shared
+RUN pnpm run build
+
+WORKDIR /app/packages/bot
+RUN pnpm run build
+
+WORKDIR /app
+
+CMD ["pnpm", "run", "start", "--filter", "@starforge/bot"]
