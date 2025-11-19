@@ -33,7 +33,7 @@ export class DataImporter {
 }
 
 export class DataExporter {
-  async exportToCSV(data: unknown[], filePath: string): Promise<ExportResult> {
+  async exportToCSV(_data: unknown[], filePath: string): Promise<ExportResult> {
     // TODO: Implement CSV export
     console.log(`Exporting to CSV: ${filePath}`);
     return {
@@ -43,7 +43,7 @@ export class DataExporter {
     };
   }
 
-  async exportToGoogleSheets(data: unknown[], sheetId: string): Promise<ExportResult> {
+  async exportToGoogleSheets(_data: unknown[], sheetId: string): Promise<ExportResult> {
     // TODO: Implement Google Sheets export
     console.log(`Exporting to Google Sheets: ${sheetId}`);
     return {

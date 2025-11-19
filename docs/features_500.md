@@ -5,12 +5,14 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🏗️ Architecture & Infrastructure
 
 ### Monorepo Structure
+
 - TypeScript monorepo with npm workspaces
 - Turbo for efficient build orchestration
 - Shared types and utilities across all packages
 - Consistent ESLint and Prettier configuration
 
 ### Backend (Fastify)
+
 - High-performance REST API
 - JWT-based authentication
 - CORS support with configurable origins
@@ -20,6 +22,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Graceful shutdown handling
 
 ### Frontend (Vue 3 + Vite)
+
 - Modern SPA with Vue 3 Composition API
 - Vite for lightning-fast development
 - Pinia for centralized state management
@@ -29,6 +32,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - API proxy for development
 
 ### Admin UI
+
 - Separate admin panel for privileged operations
 - RBAC-based access control
 - User management interface
@@ -38,6 +42,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Moderator tools dashboard
 
 ### Discord Bot (discord.js)
+
 - Full Discord integration
 - Slash command support
 - Guild-based configuration
@@ -52,12 +57,14 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🔐 Authentication & Authorization
 
 ### JWT Authentication
+
 - Secure token-based authentication
 - Token refresh mechanism
 - User session management
 - Token validation middleware
 
 ### RBAC (Role-Based Access Control)
+
 - Four default roles: Admin, Guild Master, Moderator, Member
 - Granular permission system
 - Resource-based access control
@@ -66,6 +73,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Permission checking utilities
 
 ### Multi-Tenant Architecture
+
 - Per-guild data isolation
 - Guild-specific configurations
 - Guild-scoped permissions
@@ -75,6 +83,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 📊 Database & Data Management
 
 ### Postgres/Supabase Schema
+
 - UUID-based primary keys
 - Comprehensive indexing strategy
 - JSONB for flexible metadata storage
@@ -84,6 +93,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Automatic timestamp triggers
 
 ### Tables
+
 - **users**: User accounts and profiles
 - **roles**: Role definitions
 - **user_roles**: User-role-guild assignments
@@ -98,6 +108,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - **battle_simulations**: Battle simulation history
 
 ### Data Import/Export
+
 - CSV import functionality
 - CSV export functionality
 - Google Sheets integration
@@ -109,6 +120,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🎮 Gems of War Features
 
 ### Battle Simulator
+
 - Team composition validation
 - Battle simulation engine
 - Turn-by-turn event tracking
@@ -118,6 +130,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Strategy analysis
 
 ### Recommendation Engine
+
 - Team composition recommendations
 - Troop suggestions
 - Strategy recommendations
@@ -127,6 +140,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Objective-based recommendations
 
 ### Troop Management
+
 - Complete troop database
 - Mana color tracking
 - Stat management (Attack, Armor, Life, Magic)
@@ -137,6 +151,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🎯 Feature Management
 
 ### Feature Flags
+
 - Global feature toggles
 - Guild-specific overrides
 - Rollout percentage control
@@ -146,6 +161,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Feature flag API
 
 ### Supported Features
+
 - Battle simulator
 - Recommendations
 - Google Sheets sync
@@ -155,6 +171,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 📈 Analytics & Monitoring
 
 ### Analytics Pipeline
+
 - Event tracking system
 - User behavior analytics
 - Guild performance metrics
@@ -164,6 +181,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Aggregation support
 
 ### Audit Logs
+
 - Complete action tracking
 - User attribution
 - Guild context
@@ -173,6 +191,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Tamper-proof logging
 
 ### Logging
+
 - Structured logging with Pino
 - Pretty printing for development
 - Log levels (debug, info, warn, error)
@@ -183,6 +202,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## ⚙️ Job Scheduling & Background Processing
 
 ### Scheduled Jobs (Cron)
+
 - Cron-based scheduling
 - Job payload storage
 - Execution tracking
@@ -192,6 +212,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Error handling
 
 ### Queue Jobs
+
 - Priority-based queue
 - Retry mechanism
 - Max attempt configuration
@@ -206,6 +227,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🔧 Development Tools
 
 ### ESLint Configuration
+
 - TypeScript rules
 - Vue.js rules
 - Consistent code style
@@ -214,6 +236,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Custom rule configuration
 
 ### Prettier Configuration
+
 - Automatic code formatting
 - Consistent style across codebase
 - Semicolons enforced
@@ -223,6 +246,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - LF line endings
 
 ### Testing Infrastructure
+
 - Vitest for unit tests
 - Test stubs for all packages
 - Mock support
@@ -231,6 +255,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Parallel test execution
 
 ### Docker Support
+
 - Multi-stage builds
 - Development containers
 - Production-ready images
@@ -240,6 +265,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Network isolation
 
 ### CI/CD Pipeline
+
 - GitHub Actions workflows
 - Automated testing
 - Linting checks
@@ -252,22 +278,26 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🌐 API Endpoints
 
 ### Health Endpoints
+
 - `GET /api/health` - Basic health check
 - `GET /api/health/ready` - Readiness check
 
 ### Guild Endpoints
+
 - `GET /api/guilds` - List all guilds
 - `GET /api/guilds/:guildId` - Get guild details
 - `PATCH /api/guilds/:guildId/config` - Update guild config
 - `GET /api/guilds/:guildId/members` - List guild members
 
 ### Analytics Endpoints
+
 - `GET /api/analytics` - Get analytics data
 - `POST /api/analytics/events` - Track event
 
 ## 🎨 UI Components
 
 ### Frontend Pages
+
 - Home/Dashboard
 - Guild listing
 - Battle simulator interface
@@ -276,6 +306,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Settings
 
 ### Admin Pages
+
 - User management
 - Guild administration
 - Feature flag management
@@ -286,6 +317,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🚀 Deployment & DevOps
 
 ### Environment Configuration
+
 - `.env.example` template
 - Environment variable validation
 - Development/production modes
@@ -293,6 +325,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Configuration documentation
 
 ### Docker Compose Services
+
 - PostgreSQL database
 - Redis cache
 - Backend API
@@ -303,6 +336,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Automatic restart
 
 ### Production Considerations
+
 - Horizontal scaling support
 - Load balancing ready
 - Database connection pooling
@@ -314,16 +348,19 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 📱 Discord Bot Commands
 
 ### User Commands
+
 - `/stats` - View guild statistics
 - `/battle-sim` - Simulate battles
 
 ### Admin Commands
+
 - `/config view` - View guild configuration
 - `/config set` - Update guild settings
 
 ## 🔄 Data Synchronization
 
 ### Google Sheets Integration
+
 - Read from Google Sheets
 - Write to Google Sheets
 - Real-time sync (stub)
@@ -332,6 +369,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Rate limiting
 
 ### Import/Export Tools
+
 - CSV parsing
 - Data transformation
 - Validation
@@ -342,6 +380,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 🛡️ Security Features
 
 ### Authentication Security
+
 - Password hashing (ready for implementation)
 - Token expiration
 - Refresh token rotation
@@ -349,6 +388,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Secure cookie handling
 
 ### Authorization Security
+
 - Permission checking
 - Resource-level access control
 - Guild data isolation
@@ -356,6 +396,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Audit trail
 
 ### Data Security
+
 - SQL injection prevention
 - XSS protection
 - CSRF protection
@@ -366,6 +407,7 @@ This document provides a comprehensive list of all features and capabilities in 
 ## 📊 Monitoring & Observability
 
 ### Application Metrics
+
 - Request/response times
 - Error rates
 - Resource usage
@@ -373,6 +415,7 @@ This document provides a comprehensive list of all features and capabilities in 
 - Cache hit rates
 
 ### Business Metrics
+
 - Active users
 - Guild activity
 - Battle simulations run
@@ -397,6 +440,7 @@ These features have stub implementations ready for expansion:
 ## 📚 Documentation
 
 ### Available Documentation
+
 - Main README with setup instructions
 - This features document
 - API endpoint documentation (stubs)
@@ -406,6 +450,7 @@ These features have stub implementations ready for expansion:
 - Contributing guidelines
 
 ### Code Documentation
+
 - TypeScript type definitions
 - JSDoc comments (where applicable)
 - Inline code comments
@@ -414,6 +459,7 @@ These features have stub implementations ready for expansion:
 ## 🎯 Performance Optimizations
 
 ### Backend
+
 - Connection pooling
 - Query optimization
 - Caching strategy
@@ -421,6 +467,7 @@ These features have stub implementations ready for expansion:
 - Pagination support
 
 ### Frontend
+
 - Code splitting
 - Lazy loading routes
 - Asset optimization
@@ -428,6 +475,7 @@ These features have stub implementations ready for expansion:
 - Build-time optimization
 
 ### Database
+
 - Indexed queries
 - Query optimization
 - Connection pooling
@@ -453,6 +501,7 @@ These features have stub implementations ready for expansion:
 ## 📦 Package Dependencies
 
 ### Production Dependencies
+
 - fastify
 - discord.js
 - vue
@@ -464,6 +513,7 @@ These features have stub implementations ready for expansion:
 - csv-writer
 
 ### Development Dependencies
+
 - typescript
 - vite
 - vitest

@@ -5,19 +5,13 @@ export const battleSimCommand: Command = {
   data: new SlashCommandBuilder()
     .setName('battle-sim')
     .setDescription('Simulate a Gems of War battle')
-    .addStringOption(option =>
-      option
-        .setName('team1')
-        .setDescription('First team composition')
-        .setRequired(true)
+    .addStringOption((option) =>
+      option.setName('team1').setDescription('First team composition').setRequired(true),
     )
-    .addStringOption(option =>
-      option
-        .setName('team2')
-        .setDescription('Second team composition')
-        .setRequired(true)
+    .addStringOption((option) =>
+      option.setName('team2').setDescription('Second team composition').setRequired(true),
     ),
-  
+
   async execute(interaction: ChatInputCommandInteraction) {
     const team1 = interaction.options.getString('team1', true);
     const team2 = interaction.options.getString('team2', true);

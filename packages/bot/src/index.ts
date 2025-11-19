@@ -16,7 +16,6 @@ const logger = pino({
 });
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
 
 if (!DISCORD_TOKEN) {
   logger.error('DISCORD_TOKEN environment variable is required');
@@ -64,7 +63,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       content: 'There was an error executing this command!',
       ephemeral: true,
     };
-    
+
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp(reply);
     } else {

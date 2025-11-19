@@ -8,11 +8,7 @@ export function initializeFeatureFlags(flags: FeatureFlag[]): void {
   });
 }
 
-export function isFeatureEnabled(
-  featureName: string,
-  guildId?: string,
-  userId?: string,
-): boolean {
+export function isFeatureEnabled(featureName: string, guildId?: string, userId?: string): boolean {
   const flag = featureFlags.get(featureName);
 
   if (!flag) {
@@ -31,7 +27,7 @@ export function isFeatureEnabled(
   // Check rollout percentage
   if (flag.rolloutPercentage !== undefined) {
     const hash = userId ? simpleHash(userId) : Math.random();
-    return (hash % 100) < flag.rolloutPercentage;
+    return hash % 100 < flag.rolloutPercentage;
   }
 
   return true;

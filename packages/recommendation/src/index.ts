@@ -9,10 +9,10 @@ export interface Recommendation {
 }
 
 export class RecommendationEngine {
-  recommendTeam(userTroops: Troop[], objective: string): Recommendation[] {
+  recommendTeam(_userTroops: Troop[], objective: string): Recommendation[] {
     // TODO: Implement team recommendation logic
     console.log(`Generating team recommendations for objective: ${objective}`);
-    
+
     return [
       {
         type: 'team',
@@ -24,12 +24,12 @@ export class RecommendationEngine {
     ];
   }
 
-  recommendTroops(currentTeam: BattleTeam): Recommendation[] {
+  recommendTroops(_currentTeam: BattleTeam): Recommendation[] {
     // TODO: Implement troop recommendations
     return [];
   }
 
-  recommendStrategy(team: BattleTeam, opponent: BattleTeam): Recommendation[] {
+  recommendStrategy(_team: BattleTeam, _opponent: BattleTeam): Recommendation[] {
     // TODO: Implement strategy recommendations
     return [];
   }

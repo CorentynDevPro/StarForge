@@ -38,7 +38,7 @@ export function hasPermission(
 ): boolean {
   for (const role of userRoles) {
     const permissions = rolePermissions[role];
-    
+
     for (const permission of permissions) {
       if (
         (permission.resource === '*' || permission.resource === resource) &&
@@ -58,7 +58,7 @@ export function getRolePermissions(role: Role): Permission[] {
 
 export function getAllPermissions(roles: Role[]): Permission[] {
   const allPermissions: Permission[] = [];
-  
+
   for (const role of roles) {
     allPermissions.push(...getRolePermissions(role));
   }

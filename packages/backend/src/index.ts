@@ -20,6 +20,14 @@ const schema = {
   },
 };
 
+interface Config {
+  PORT: string;
+  SUPABASE_URL: string;
+  SUPABASE_ANON_KEY: string;
+  JWT_SECRET: string;
+  NODE_ENV: string;
+}
+
 async function buildServer() {
   const fastify = Fastify({
     logger: {
@@ -39,6 +47,8 @@ async function buildServer() {
     dotenv: true,
   });
 
+  const config = fastify.getEnvs<Config>();
+
   // Register CORS
   await fastify.register(cors, {
     origin: true,
@@ -47,7 +57,7 @@ async function buildServer() {
 
   // Register JWT
   await fastify.register(jwt, {
-    secret: fastify.config.JWT_SECRET,
+    secret: config.JWT_SECRET,
   });
 
   // Register middleware
@@ -65,7 +75,8 @@ async function buildServer() {
 async function start() {
   try {
     const fastify = await buildServer();
-    const port = parseInt(fastify.config.PORT || '3000', 10);
+    const config = fastify.getEnvs<Config>();
+    const port = parseInt(config.PORT || '3000', 10);
     const host = '0.0.0.0';
 
     await fastify.listen({ port, host });

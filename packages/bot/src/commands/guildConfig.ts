@@ -6,29 +6,21 @@ export const guildConfigCommand: Command = {
     .setName('config')
     .setDescription('Configure guild settings (Admin only)')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .addSubcommand(subcommand =>
-      subcommand
-        .setName('view')
-        .setDescription('View current guild configuration')
+    .addSubcommand((subcommand) =>
+      subcommand.setName('view').setDescription('View current guild configuration'),
     )
-    .addSubcommand(subcommand =>
+    .addSubcommand((subcommand) =>
       subcommand
         .setName('set')
         .setDescription('Set a configuration option')
-        .addStringOption(option =>
-          option
-            .setName('key')
-            .setDescription('Configuration key')
-            .setRequired(true)
+        .addStringOption((option) =>
+          option.setName('key').setDescription('Configuration key').setRequired(true),
         )
-        .addStringOption(option =>
-          option
-            .setName('value')
-            .setDescription('Configuration value')
-            .setRequired(true)
-        )
+        .addStringOption((option) =>
+          option.setName('value').setDescription('Configuration value').setRequired(true),
+        ),
     ),
-  
+
   async execute(interaction: ChatInputCommandInteraction) {
     const subcommand = interaction.options.getSubcommand();
     const guildId = interaction.guildId;
@@ -42,7 +34,7 @@ export const guildConfigCommand: Command = {
     } else if (subcommand === 'set') {
       const key = interaction.options.getString('key', true);
       const value = interaction.options.getString('value', true);
-      
+
       // TODO: Update guild config in database with RBAC check
       await interaction.reply({
         content: `✅ Configuration updated: \`${key}\` = \`${value}\``,

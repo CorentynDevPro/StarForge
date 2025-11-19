@@ -1,10 +1,10 @@
 import { BattleTeam, BattleResult, BattleEvent } from '@starforge/shared';
 
 export class BattleSimulator {
-  simulateBattle(team1: BattleTeam, team2: BattleTeam): BattleResult {
+  simulateBattle(_team1: BattleTeam, _team2: BattleTeam): BattleResult {
     // TODO: Implement battle simulation logic
     console.log('Simulating battle between teams');
-    
+
     const events: BattleEvent[] = [
       {
         turn: 1,
