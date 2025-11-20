@@ -1,9 +1,10 @@
-version: '3.8'
-
 services:
+  # Local DB/Redis — only started when using the "local" profile:
   postgres:
     image: postgres:15-alpine
     container_name: starforge-postgres
+    profiles:
+      - local
     environment:
       POSTGRES_DB: starforge
       POSTGRES_USER: starforge
@@ -15,79 +16,88 @@ services:
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./database/seeds.sql:/docker-entrypoint-initdb.d/02-seeds.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U starforge"]
+      test: [ "CMD-SHELL", "pg_isready -U starforge" ]
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
     container_name: starforge-redis
+    profiles:
+      - local
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 3s
       retries: 5
+    restart: unless-stopped
 
+  # Application services (use env values from .env by default)
   backend:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
     container_name: starforge-backend
+    env_file:
+      - .env
     environment:
-      PORT: 3000
-      NODE_ENV: development
-      SUPABASE_URL: http://postgres:5432
-      SUPABASE_ANON_KEY: your-anon-key-here
-      JWT_SECRET: your-jwt-secret-here
-      DATABASE_URL: postgresql://starforge:starforge_dev@postgres:5432/starforge
-      REDIS_URL: redis://redis:6379
+      # keep minimal explicit vars here; other config comes from .env
+      PORT: ${PORT:-3000}
+      NODE_ENV: ${NODE_ENV:-development}
+      # Optional: keep these to make intent explicit (read from .env)
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
+      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS:-}
     ports:
       - "3000:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
     volumes:
       - ./packages/backend:/app/packages/backend
       - /app/node_modules
     command: pnpm run dev
+    restart: unless-stopped
 
   bot:
     build:
       context: .
       dockerfile: docker/Dockerfile.bot
     container_name: starforge-bot
+    env_file:
+      - .env
     environment:
-      NODE_ENV: development
+      NODE_ENV: ${NODE_ENV:-development}
       DISCORD_TOKEN: ${DISCORD_TOKEN}
       DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
-      DATABASE_URL: postgresql://starforge:starforge_dev@postgres:5432/starforge
-      SUPABASE_URL: http://postgres:5432
-      SUPABASE_ANON_KEY: your-anon-key-here
-    depends_on:
-      postgres:
-        condition: service_healthy
-      backend:
-        condition: service_started
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      JWT_SECRET: ${JWT_SECRET}
     volumes:
       - ./packages/bot:/app/packages/bot
       - /app/node_modules
     command: pnpm run dev
+    restart: unless-stopped
 
   frontend:
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
     container_name: starforge-frontend
+    env_file:
+      - .env
     environment:
-      NODE_ENV: development
-      VITE_API_URL: http://localhost:3000
+      NODE_ENV: ${NODE_ENV:-development}
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
     ports:
       - "5173:5173"
     depends_on:
@@ -96,15 +106,18 @@ services:
       - ./packages/frontend:/app/packages/frontend
       - /app/node_modules
     command: pnpm run dev
+    restart: unless-stopped
 
   admin-ui:
     build:
       context: .
       dockerfile: docker/Dockerfile.admin
     container_name: starforge-admin
+    env_file:
+      - .env
     environment:
-      NODE_ENV: development
-      VITE_API_URL: http://localhost:3000
+      NODE_ENV: ${NODE_ENV:-development}
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
     ports:
       - "5174:5174"
     depends_on:
@@ -113,6 +126,7 @@ services:
       - ./packages/admin-ui:/app/packages/admin-ui
       - /app/node_modules
     command: pnpm run dev
+    restart: unless-stopped
 
 volumes:
   postgres_data:
