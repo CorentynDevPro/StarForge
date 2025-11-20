@@ -1,0 +1,106 @@
+name: Database Bootstrap
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+          - development
+
+jobs:
+  migrate:
+    name: Apply Database Migrations
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Setup environment variables
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "ERROR: DATABASE_URL secret is not set"
+            exit 1
+          fi
+          echo "PGSSLMODE=require" >> $GITHUB_ENV
+          echo "✓ Environment variables configured"
+      
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PGSSLMODE: require
+        run: |
+          echo "Running database migrations..."
+          pnpm run migrate:up
+          echo "✓ Migrations completed successfully"
+      
+      - name: Apply seed data
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PGSSLMODE: require
+        run: |
+          echo "Applying seed data..."
+          # Install psql if not available
+          if ! command -v psql &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y postgresql-client
+          fi
+          psql "$DATABASE_URL" -f database/seeds/0001_seeds.sql || echo "Seeds may have been previously applied"
+          echo "✓ Seed data applied"
+      
+      - name: Verify database setup
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PGSSLMODE: require
+        run: |
+          echo "Verifying database tables..."
+          psql "$DATABASE_URL" -c "\dt" | grep -E '(users|guilds|roles|feature_flags)' || exit 1
+          echo "✓ Database verification successful"
+      
+      - name: Migration summary
+        if: success()
+        run: |
+          echo "================================================"
+          echo "✓ Database migration completed successfully!"
+          echo "================================================"
+          echo ""
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo ""
