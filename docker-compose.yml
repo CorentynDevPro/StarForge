@@ -47,17 +47,8 @@ services:
     env_file:
       - .env
     environment:
-      # keep minimal explicit vars here; other config comes from .env
       PORT: ${PORT:-3000}
       NODE_ENV: ${NODE_ENV:-development}
-      # Optional: keep these to make intent explicit (read from .env)
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_URL: ${REDIS_URL}
-      JWT_SECRET: ${JWT_SECRET}
-      SUPABASE_URL: ${SUPABASE_URL}
-      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
-      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
-      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS:-}
     ports:
       - "3000:3000"
     volumes:
@@ -75,13 +66,6 @@ services:
       - .env
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      DISCORD_TOKEN: ${DISCORD_TOKEN}
-      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_URL: ${REDIS_URL}
-      SUPABASE_URL: ${SUPABASE_URL}
-      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
-      JWT_SECRET: ${JWT_SECRET}
     volumes:
       - ./packages/bot:/app/packages/bot
       - /app/node_modules
