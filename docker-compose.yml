@@ -1,43 +1,4 @@
 services:
-  # Local DB/Redis — only started when using the "local" profile:
-  postgres:
-    image: postgres:15-alpine
-    container_name: starforge-postgres
-    profiles:
-      - local
-    environment:
-      POSTGRES_DB: starforge
-      POSTGRES_USER: starforge
-      POSTGRES_PASSWORD: starforge_dev
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      - ./database/seeds.sql:/docker-entrypoint-initdb.d/02-seeds.sql
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U starforge" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
-  redis:
-    image: redis:7-alpine
-    container_name: starforge-redis
-    profiles:
-      - local
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    restart: unless-stopped
-
   # Application services (use env values from .env by default)
   backend:
     build:
