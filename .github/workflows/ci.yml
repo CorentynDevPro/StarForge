@@ -2,9 +2,13 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main, develop ]
+
+# Minimal permissions to reduce token exposure
+permissions:
+  contents: read
 
 jobs:
   lint:
@@ -12,23 +16,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      
+
       - name: Setup pnpm cache
         uses: actions/cache@v3
         with:
@@ -36,13 +40,14 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      
+
       - name: Install dependencies
-        run: pnpm install
-      
+        # Use frozen lockfile for reproducible installs
+        run: pnpm install --frozen-lockfile
+
       - name: Run ESLint
         run: pnpm run lint
-      
+
       - name: Check Prettier formatting
         run: pnpm run format:check
 
@@ -51,23 +56,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      
+
       - name: Setup pnpm cache
         uses: actions/cache@v3
         with:
@@ -75,10 +80,10 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      
+
       - name: Install dependencies
-        run: pnpm install
-      
+        run: pnpm install --frozen-lockfile
+
       - name: Run type checking
         run: pnpm run type-check
 
@@ -87,23 +92,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      
+
       - name: Setup pnpm cache
         uses: actions/cache@v3
         with:
@@ -111,36 +116,44 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      
+
       - name: Install dependencies
-        run: pnpm install
-      
+        run: pnpm install --frozen-lockfile
+
       - name: Run tests
         run: pnpm run test
+
+      - name: Upload coverage artifact (if produced)
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, type-check, test]
+    needs: [ lint, type-check, test ]
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      
+
       - name: Get pnpm store directory
         id: pnpm-cache
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-      
+
       - name: Setup pnpm cache
         uses: actions/cache@v3
         with:
@@ -148,13 +161,13 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-      
+
       - name: Install dependencies
-        run: pnpm install
-      
+        run: pnpm install --frozen-lockfile
+
       - name: Build all packages
         run: pnpm run build
-      
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -167,14 +180,17 @@ jobs:
   docker:
     name: Build Docker Images
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [ build ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Build backend image
         uses: docker/build-push-action@v5
         with:
@@ -184,7 +200,7 @@ jobs:
           tags: starforge-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      
+
       - name: Build bot image
         uses: docker/build-push-action@v5
         with:
