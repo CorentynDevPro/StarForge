@@ -33,6 +33,7 @@
 | Stakeholders      | **Project Maintainers, small test community**                                                                                         |
 
 > Note: "TBD" stands for "To Be Determined" — role/person not yet assigned.
+> For a comprehensive glossary of abbreviations and technical terms used across this PRD, see: [docs/GLOSSARY.md](./GLOSSARY.md).
 
 ---
 
