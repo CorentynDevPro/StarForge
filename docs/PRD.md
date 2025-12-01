@@ -4,7 +4,7 @@
 
 ## 🔒 Confidentiality Notice
 
-> ⚠️ This is a living document and will be updated as the project evolves.
+> ⚠️ Moreover, this is a living document and will be updated as the project evolves.
 
 ---
 
