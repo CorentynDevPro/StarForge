@@ -4,9 +4,7 @@
 
 ## 🔒 Confidentiality Notice
 
-![SENSITIVE](https://img.shields.io/badge/SENSITIVE-DO%20NOT%20SHARE-red?style=for-the-badge)
-> ⚠️ This document may contain sensitive information. Do not share outside the approved group.
-> Moreover, this is a living document and will be updated as the project evolves.
+> ⚠️ Moreover, this is a living document and will be updated as the project evolves.
 
 ---
 
