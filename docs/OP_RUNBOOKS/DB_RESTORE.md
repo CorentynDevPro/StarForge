@@ -1,4 +1,4 @@
-# Runbook — Database Restore / Recovery (DB_RESTORE.md)
+# Runbook — Database Restore / Recovery
 
 ---
 
