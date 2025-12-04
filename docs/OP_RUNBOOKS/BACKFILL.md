@@ -1,4 +1,4 @@
-# Runbook — Backfill Historical Snapshots (BACKFILL.md)
+# Runbook — Backfill Historical Snapshots
 
 ## Purpose
 

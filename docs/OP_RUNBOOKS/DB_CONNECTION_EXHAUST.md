@@ -1,4 +1,4 @@
-# Runbook — Postgres Connection Exhaustion (DB_CONNECTION_EXHAUST.md)
+# Runbook — Postgres Connection Exhaustion
 
 ---
 
