@@ -1,4 +1,4 @@
-# StarForge — Canonical Database Model (DB_MODEL.md)
+# StarForge — Canonical Database Model
 
 > This document is the canonical reference for the database schema used by StarForge. It expands the summary in the PRD
 > and contains:
