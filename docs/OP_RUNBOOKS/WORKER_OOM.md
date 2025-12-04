@@ -1,4 +1,4 @@
-# Runbook — Worker Out Of Memory (WORKER_OOM.md)
+# Runbook — Worker Out Of Memory
 
 ---
 
